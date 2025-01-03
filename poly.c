@@ -315,6 +315,56 @@ int Euclidean_algorithm(GFNUM *ax, int deg_ax, GFNUM *bx, int deg_bx, GFNUM *sx,
     return flag;
 }
 
+GFNUM substitution(GFNUM *poly, int deg, GFNUM beta){
+    int i = 0;
+    GFNUM res = 0;
+    for(i = deg ; i >= 0 ; --i){
+        res = GF_MUL(res, beta);
+        res = GF_ADD(res, poly[i]);
+    }
+    return res;
+}
+
+GFNUM substition_bar_X(GFNUM *poly, int deg, GFNUM beta){
+    GFNUM res = GFZERO;
+
+    assert(deg >= 0  && deg < GFSIZE);
+
+    if(deg == 0){
+        return poly[0];
+    }
+
+    int mu = 0;
+    //find the smallest 'mu' such that deg < (2^mu)
+    for(; deg >= (1 << mu) ; ++mu) ;
+
+    //printf("mu = %d\n", mu);
+    int i = 0;
+    int t_mu = mu - 1;
+    int size = 1 << t_mu;
+
+    GFNUM temp = GFZERO;
+
+    GFNUM *t_poly = (GFNUM *) malloc (sizeof(GFNUM) * size);
+
+    for(i = 0 ; i < size ; ++i){
+        if(i + size <= deg){
+            //temp = GF_MUL(s_beta[t_mu][beta], GF_INV(s_beta[t_mu][v[t_mu]]));
+            temp = para[t_mu][beta];
+            t_poly[i] = GF_ADD(poly[i], GF_MUL(poly[i + size], temp));
+        }
+        else{
+            t_poly[i] = poly[i];
+        }
+    }
+
+    res = substition_bar_X(t_poly, size - 1, beta);
+
+    free(t_poly);
+
+    return res;
+}
+
 void test_mul_div(){
     int i = 0, j = 0;
 

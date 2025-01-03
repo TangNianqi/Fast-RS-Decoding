@@ -4,7 +4,7 @@
  * @Author: Nianqi Tang
  * @Date: 2025-01-02 00:37:06
  * @LastEditors: Nianqi Tang
- * @LastEditTime: 2025-01-02 22:46:42
+ * @LastEditTime: 2025-01-03 22:48:27
  */
 #ifndef _GF_H_
 #define _GF_H_
@@ -16,8 +16,8 @@
 #include "time.h"
 
 //***********
-#define m 13
-#define primpoly 020033
+#define m 8
+#define primpoly 0435
 //***********
 
 /*
